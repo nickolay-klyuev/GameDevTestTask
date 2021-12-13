@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AsteroidController : MonoBehaviour
 {
+    [SerializeField] private GameObject explosion;
+
     private AsteroidsMaker asteroidsMaker;
     private GhostObjectsMaker ghosts;
     private ScoreDisplay scoreDisplay;
@@ -26,6 +28,7 @@ public class AsteroidController : MonoBehaviour
             {
                 collision.gameObject.SetActive(false);
                 scoreDisplay.AddScore();
+                Instantiate(explosion, transform.position, Quaternion.identity);
             }
 
             asteroidsMaker.SpawnAsteroid();
