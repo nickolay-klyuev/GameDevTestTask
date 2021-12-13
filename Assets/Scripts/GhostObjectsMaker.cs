@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GhostObjectsMaker : MonoBehaviour
 {
-    private GameObject[] ghostObject = new GameObject[8];
+    private GameObject[] ghostObjects = new GameObject[8];
 
     static public float screenWidth;
     static public float screenHeight;
@@ -18,13 +18,14 @@ public class GhostObjectsMaker : MonoBehaviour
         screenWidth = screenTopRight.x - screenBottomLeft.x;
         screenHeight = screenTopRight.y - screenBottomLeft.y;
 
-        // create ghostShips
-        for (int i = 0; i < ghostObject.Length; i++)
+        // create ghostObjects
+        for (int i = 0; i < ghostObjects.Length; i++)
         {
-            ghostObject[i] = Instantiate(gameObject, transform.position, transform.rotation);
+            ghostObjects[i] = Instantiate(gameObject, transform.position, transform.rotation);
 
-            DestroyImmediate(ghostObject[i].GetComponent<GhostObjectsMaker>());
-            DestroyImmediate(ghostObject[i].GetComponent<PlayerController>());
+            DestroyImmediate(ghostObjects[i].GetComponent<GhostObjectsMaker>());
+            DestroyImmediate(ghostObjects[i].GetComponent<PlayerController>());
+            DestroyImmediate(ghostObjects[i].GetComponent<AsteroidController>());
         }
 
         GhostObjectsPosition();
@@ -41,7 +42,7 @@ public class GhostObjectsMaker : MonoBehaviour
         // ghost ships control
         GhostObjectsPosition();
 
-        foreach (GameObject ghost in ghostObject)
+        foreach (GameObject ghost in ghostObjects)
         {
             Transform ghostT = ghost.transform;
             ghostT.rotation = transform.rotation;
@@ -62,41 +63,49 @@ public class GhostObjectsMaker : MonoBehaviour
         
         // right
         ghostPostion.x = transform.position.x + screenWidth;
-        ghostObject[0].transform.position = ghostPostion;
+        ghostObjects[0].transform.position = ghostPostion;
 
         // right bot 
         ghostPostion.x = transform.position.x + screenWidth;
         ghostPostion.y = transform.position.y - screenHeight;
-        ghostObject[1].transform.position = ghostPostion;
+        ghostObjects[1].transform.position = ghostPostion;
 
         // bot
         ghostPostion.x = transform.position.x;
         ghostPostion.y = transform.position.y - screenHeight;
-        ghostObject[2].transform.position = ghostPostion;
+        ghostObjects[2].transform.position = ghostPostion;
 
         // left bot
         ghostPostion.x = transform.position.x - screenWidth;
         ghostPostion.y = transform.position.y - screenHeight;
-        ghostObject[3].transform.position = ghostPostion;
+        ghostObjects[3].transform.position = ghostPostion;
 
         // left
         ghostPostion.x = transform.position.x - screenWidth;
         ghostPostion.y = transform.position.y;
-        ghostObject[4].transform.position = ghostPostion;
+        ghostObjects[4].transform.position = ghostPostion;
 
         // left top
         ghostPostion.x = transform.position.x - screenWidth;
         ghostPostion.y = transform.position.y + screenHeight;
-        ghostObject[5].transform.position = ghostPostion;
+        ghostObjects[5].transform.position = ghostPostion;
 
         // top
         ghostPostion.x = transform.position.x;
         ghostPostion.y = transform.position.y + screenHeight;
-        ghostObject[6].transform.position = ghostPostion;
+        ghostObjects[6].transform.position = ghostPostion;
 
         // right top 
         ghostPostion.x = transform.position.x + screenWidth;
         ghostPostion.y = transform.position.y + screenHeight;
-        ghostObject[7].transform.position = ghostPostion;
+        ghostObjects[7].transform.position = ghostPostion;
+    }
+
+    void OnDestroy()
+    {
+        foreach (GameObject ghost in ghostObjects)
+        {
+            Destroy(ghost);
+        }
     }
 }
