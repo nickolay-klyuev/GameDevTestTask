@@ -17,10 +17,17 @@ public class AsteroidController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {   
-        if (collision.gameObject.CompareTag("Laser"))
+        bool isLaser = collision.gameObject.CompareTag("Laser");
+        bool isPlayer = collision.gameObject.CompareTag("Player");
+        
+        if (isLaser || isPlayer)
         {
-            scoreDisplay.AddScore();
-            collision.gameObject.SetActive(false);
+            if (isLaser)
+            {
+                collision.gameObject.SetActive(false);
+                scoreDisplay.AddScore();
+            }
+
             asteroidsMaker.SpawnAsteroid();
             Destroy(gameObject);
         }

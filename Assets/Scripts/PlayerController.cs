@@ -7,12 +7,24 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private AudioClip laserSound;
+    [SerializeField] private AudioClip hitSound;
     [SerializeField] private float laserForce = 10f;
+    [SerializeField] private int shields = 3;
+    public int GetShields()
+    {
+        return shields;
+    }
     private GameObject[] laserPool = new GameObject[8];
+
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.volume = 0.4f;
+
         // create laser pool
         for (int i = 0; i < laserPool.Length; i++)
         {
@@ -27,6 +39,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             FireLaser();
+        }
+
+        if (shields <= 0)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
@@ -46,7 +63,8 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        audioSource.PlayOneShot(hitSound);
+        shields--;
     }
 
     private void RotateToPoint(Vector3 point, Transform transform)
@@ -60,6 +78,8 @@ public class PlayerController : MonoBehaviour
 
     private void FireLaser()
     {
+        audioSource.PlayOneShot(laserSound);
+
         foreach (GameObject laser in laserPool)
         {
             if (!laser.activeSelf)
